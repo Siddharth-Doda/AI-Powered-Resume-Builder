@@ -11,10 +11,18 @@ const PORT = process.env.PORT || 3000;
 
 
 //Database connection 
-await connectDB()
+try {
+    await connectDB()
+    console.log("Database connected")
+} catch (error) {
+    console.error("DB connection failed:", error)
+}
 
 app.use(express.json())
-app.use(cors())
+app.use(cors({
+    origin: "*",
+    credentials: true
+}))
 
 app.get('/',(req,res)=> res.send("Server is live..."))
 app.use('/api/users',userRouter)
