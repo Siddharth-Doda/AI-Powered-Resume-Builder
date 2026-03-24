@@ -1,4 +1,4 @@
-# 🚀 Resume Builder
+# 🚀 ResumeCraft
 
 An intelligent full-stack web application that helps users **create, analyze, and improve resumes using AI**.
 
@@ -108,6 +108,7 @@ npm run dev
 * Backend → Render / Railway
 * Database → MongoDB Atlas
 
+**Live Demo:**  https://ai-powered-resume-builder-navy.vercel.app/
 ## Author
 
 **Siddharth Doda**
