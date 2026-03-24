@@ -49,14 +49,14 @@ export const loginUser = async(req,res) => {
         const {email,password} = req.body;
 
         //check if user exists
-        const user = await User.findOne({email})
-        if(!user){
-            return res.status(400).json({message: 'Invalid email or password'})
+        const user = await User.findOne({ email })
+        if (!user) {
+            return res.status(400).json({ message: 'Invalid email or password' })
         }
-
-        //check if password is correct
-        if(!user.comparePassword(password)){
-            return res.status(400).json({message: 'Invalid email or password'})
+        const isMatch = await bcrypt.compare(password, user.password)
+        
+        if (!isMatch) {
+            return res.status(400).json({ message: 'Invalid email or password' })
         }
 
         //return success message
@@ -105,3 +105,33 @@ export const getUserResume = async (req,res) => {
         return res.status(400).json({message:error.message})
     }
 }
+
+export const forgotPassword = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        // 1. Validate input
+        if (!email || !password) {
+            return res.status(400).json({ message: "Email and new password are required" });
+        }
+
+        // 2. Check if user exists
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // 3. Hash new password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // 4. Update password
+        user.password = hashedPassword;
+        await user.save();
+
+        return res.status(200).json({ message: "Password updated successfully" });
+
+    } catch (error) {
+        return res.status(400).json({ message: error.message });
+    }
+};
